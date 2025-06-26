@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An impressive and flawless site template that includes various UI elements and countless features, attractive ready-made blocks and rich pages, basically everything you need to create a unique and professional website.">
+  <meta name="keywords" content="bootstrap 5, business, corporate, creative, gulp, marketing, minimal, modern, multipurpose, one page, responsive, saas, sass, seo, startup, html5 template, site template">
+  <meta name="author" content="elemis">
+  <title>Сантехнические услуги в Москве</title>
+  <link rel="shortcut icon" href="./assets/img/favicon.png">
+  <link rel="stylesheet" href="./assets/css/plugins.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <style>
+
+@layer base, rhythm, layout, components, default, overwrites;
+
+main {
+  /* Create a snapping rule on the html element */
+  scroll-snap-type: y mandatory;
+
+  /* Create a timeline scope, so we can target any element on the page */
+  timeline-scope: --section, --main, --site-header;
+}
+
+/* We'll want to match these colors for the best melty effect */
+/* But play around with them (and add a color to section) to see happens */
+body {
+  background-color: var(--color-background, #1C1C1E );
+  
+}
+.navbar {
+  --bs-navbar-color: #c5c9d0;
+}
+
+.navbar-stick:not(.navbar-dark) {
+    background: #1e2228;
+}
+
+button.hamburger {
+  color: #c5c9d0;
+}
+
+main {
+  view-timeline: --main;
+}
+
+.section {
+  /* Creating a snapping rule on the section element */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  /* Attach the timeline to the section element*/
+  view-timeline: --section;
+
+  /* Set each section to the full dynamic height of the viewport */
+  height: 100dvh;
+}
+
+.content {
+  /* Fix the content, so it doesn't scroll with the section */
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  margin-top: 200px;
+
+  /* Animate the content based on the section scrolling */
+  --contrast: 4;
+  --blur: 0.5rem;
+
+  animation: blink ease-in-out both;
+  animation-timeline: --section;
+}
+.filled-text {
+  position: absolute;
+  z-index: 1;
+  font-size: 90px;
+  font-weight: 600;
+}
+
+.outline-text {
+  position: absolute;
+  z-index: 3;
+  font-size: 90px;
+  font-weight: 600;
+  -webkit-text-stroke-width: 4px;
+  -webkit-text-stroke-color: ghostwhite;
+  color: transparent;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    filter: blur(var(--blur)) contrast(var(--contrast));
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  50% {
+    filter: blur(0) contrast(1);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* 
+  This is a bit of a hack to get the indicator to work because I'm lazy.
+  We're translating the dot from the top to the bottom of its parent,
+  using the browser scroll position as the animation timeline.
+  It's not really matched up to the scrolling sections, only appears to be.
+*/
+.indicator::before {
+  animation: indicate linear both;
+  animation-timeline: --main;
+  animation-range: contain;
+}
+
+/* And we're manually setting the colors because see: lazy comment above */
+@keyframes indicate {
+  0% {
+    --color-indicator: var(--color-primary);
+    transform: translateY(0);
+  }
+
+  25% {
+    --color-indicator: var(--color-yellow);
+  }
+
+  50% {
+    --color-indicator: var(--color-secondary);
+  }
+
+  75% {
+    --color-indicator: var(--color-red);
+  }
+
+  100% {
+    --color-indicator: var(--color-purple);
+    transform: translateY(
+      calc(var(--indicator-total-height) - var(--indicator-size))
+    );
+  }
+}
+
+/* Remove gradient indicator on scroll-to-end (visible on small screens */
+
+.site-header label:last-of-type {
+  view-timeline: --site-header inline;
+}
+
+.site-header::after {
+  animation: fade-scroll ease-in-out both;
+  animation-timeline: --site-header;
+  animation-range: entry-crossing;
+}
+
+@keyframes fade-scroll {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Change animation based on radio checked */
+body:has([value="horizontal-scroll"]:checked) .content {
+  /* 
+    The only reason we're repeat these two properties instead of simply 
+    setting `animation-name` is so the polyfill will pick them up 
+    They're flaky though and tend to get stuck. You might need to
+    refresh the page and select an option before scrolling
+  */
+  animation: horizontal-scroll ease-in-out both;
+  animation-timeline: --section;
+}
+
+body:has([value="backwards-scroll"]:checked) .content {
+  animation: backwards-scroll ease-in-out both;
+  animation-timeline: --section;
+}
+
+body:has([value="zoom-scroll"]:checked) .content {
+  animation: zoom-scroll ease-in-out both;
+  animation-timeline: --section;
+}
+
+/* Alternative animations */
+/* Very cool, try it */
+@keyframes horizontal-scroll {
+  0% {
+    transform: translate3d(100%, 0%, 0);
+  }
+
+  50% {
+    transform: none;
+  }
+
+  100% {
+    transform: translate3d(-100%, 0%, 0);
+  }
+}
+
+/* Befuddling, try it */
+@keyframes backwards-scroll {
+  0% {
+    transform: translate3d(0%, -100%, 0);
+  }
+
+  50% {
+    transform: none;
+  }
+
+  100% {
+    transform: translate3d(0%, 100%, 0);
+  }
+}
+
+/* WIP */
+@keyframes zoom-scroll {
+  0% {
+    filter: blur(5rem);
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  50% {
+    filter: blur(0);
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    filter: blur(3rem);
+    transform: scale(1.5);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.item figure .item-cart,
+    .swiper-slide figure .item-cart {
+        opacity: 1 !important;
+        bottom: 0 !important;
+        background: rgb(27 62 41 / 80%) !important;
+   }
+
+/* 
+  The actual page styling is in a different stylesheet to not clutter
+  this pen with irrelevant or confusing code
+
+  https://codepen.io/giana/pen/rNRzgRj
+*/
+
+  </style>
+</head>
+
+<body>
+  <div class="content-wrapper">
+    <header class="wrapper bg-soft-primary">
+      <nav class="navbar navbar-expand-lg center-nav transparent position-absolute navbar-dark caret-none">
+        <div class="container flex-lg-row flex-nowrap align-items-center">
+          <div class="navbar-other w-100">
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <li class="nav-item d-lg-none">
+                <button class="hamburger offcanvas-nav-btn"><span></span></button>
+              </li>
+            </ul>
+            <!-- /.navbar-nav -->
+          </div>
+          <!-- /.navbar-other -->
+          <div class="navbar-collapse offcanvas offcanvas-nav offcanvas-start">
+            <div class="offcanvas-header d-lg-none">
+              <h3 class="text-white fs-30 mb-0">Меню</h3>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body ms-lg-auto d-flex flex-column h-100">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="./index.html">О компании</a>
+                  <!--/.dropdown-menu -->
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./films/">Наши преимущества</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./series/">Услуги и цены</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./collection/">Проекты</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./collection/">Монтажники</a>
+                </li>
+              </ul>
+              <!-- /.navbar-nav -->
+              <!-- /.offcanvas-footer -->
+            </div>
+            <!-- /.offcanvas-body -->
+          </div>
+          <!-- /.navbar-collapse -->
+          <div class="navbar-brand">
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <li class="nav-item dropdown m-2 language-select text-uppercase">
+                <a class="nav-link dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ru</a>
+                <ul class="dropdown-menu">
+                  <li class="nav-item"><a class="dropdown-item" href="#">Ru</a></li>
+                  <li class="nav-item"><a class="dropdown-item" href="#">Eng</a></li>
+                  <li class="nav-item"><a class="dropdown-item" href="#">Es</a></li>
+                </ul>
+              </li>
+              <li class="nav-item d-none d-md-block">
+                <a class="nav-link position-relative d-flex fs-20 flex-row logo-dark align-items-center" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-cart">
+                  <i class="uil uil-receipt"></i>
+                  <span class="badge badge-cart bg-primary">0</span>
+                </a>
+              </li>
+            </ul>
+            <!-- /.navbar-nav -->
+          </div>
+        </div>
+        <!-- /.container -->
+      </nav>
+      <!-- /.navbar -->
+       
+      <div class="offcanvas offcanvas-end bg-light" id="offcanvas-cart" data-bs-scroll="true">
+        <div class="offcanvas-header">
+          <h3 class="mb-0">Корзина</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+          <div class="shopping-cart">
+            <div class="shopping-cart-item d-flex justify-content-between mb-4">
+              <div class="d-flex flex-row">
+                <figure class="rounded w-17"><a href="./shop-product.html"><img src="./assets/img/photos/sth1.jpg" srcset="./assets/img/photos/sth1@2x.jpg 2x" alt="" /></a></figure>
+                <div class="w-100 ms-4">
+                  <h3 class="post-title fs-16 lh-xs mb-1"><a href="./shop-product.html" class="link-dark">Nike Air Sneakers</a></h3>
+                  <p class="price fs-sm"><del><span class="amount">$55.00</span></del> <ins><span class="amount">$45.99</span></ins></p>
+                  <div class="form-select-wrapper">
+                    <select class="form-select form-select-sm">
+                      <option value="1" selected>1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                  <!--/.form-select-wrapper -->
+                </div>
+              </div>
+              <div class="ms-2"><a href="#" class="link-dark"><i class="uil uil-trash-alt"></i></a></div>
+            </div>
+            <!--/.shopping-cart-item -->
+            <div class="shopping-cart-item d-flex justify-content-between mb-4">
+              <div class="d-flex flex-row">
+                <figure class="rounded w-17"><a href="./shop-product.html"><img src="./assets/img/photos/sth2.jpg" srcset="./assets/img/photos/sth2@2x.jpg 2x" alt="" /></a></figure>
+                <div class="w-100 ms-4">
+                  <h3 class="post-title fs-16 lh-xs mb-1"><a href="./shop-product.html" class="link-dark">Colorful Sneakers</a></h3>
+                  <p class="price fs-sm"><span class="amount">$45.00</span></p>
+                  <div class="form-select-wrapper">
+                    <select class="form-select form-select-sm">
+                      <option value="1" selected>1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                  <!--/.form-select-wrapper -->
+                </div>
+              </div>
+              <div class="ms-2"><a href="#" class="link-dark"><i class="uil uil-trash-alt"></i></a></div>
+            </div>
+            <!--/.shopping-cart-item -->
+            <div class="shopping-cart-item d-flex justify-content-between mb-4">
+              <div class="d-flex flex-row">
+                <figure class="rounded w-17"><a href="./shop-product.html"><img src="./assets/img/photos/sth3.jpg" srcset="./assets/img/photos/sth3@2x.jpg 2x" alt="" /></a></figure>
+                <div class="w-100 ms-4">
+                  <h3 class="post-title fs-16 lh-xs mb-1"><a href="./shop-product.html" class="link-dark">Polaroid Camera</a></h3>
+                  <p class="price fs-sm"><span class="amount">$45.00</span></p>
+                  <div class="form-select-wrapper">
+                    <select class="form-select form-select-sm">
+                      <option value="1" selected>1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                  <!--/.form-select-wrapper -->
+                </div>
+              </div>
+              <div class="ms-2"><a href="#" class="link-dark"><i class="uil uil-trash-alt"></i></a></div>
+            </div>
+            <!--/.shopping-cart-item -->
+          </div>
+          <!-- /.shopping-cart-->
+          <div class="offcanvas-footer flex-column text-center">
+            <div class="d-flex w-100 justify-content-between mb-4">
+              <span>Subtotal:</span>
+              <span class="h6 mb-0">$135.99</span>
+            </div>
+            <a href="#" class="btn btn-primary btn-icon btn-icon-start rounded w-100 mb-4"><i class="uil uil-credit-card fs-18"></i> Checkout</a>
+            <p class="fs-14 mb-0">Free shipping on all orders over $50</p>
+          </div>
+          <!-- /.offcanvas-footer-->
+        </div>
+        <!-- /.offcanvas-body -->
+      </div>
+      <!-- /.offcanvas -->
+      <div class="offcanvas offcanvas-end text-inverse" id="offcanvas-info" data-bs-scroll="true">
+        <div class="offcanvas-header">
+          <h3 class="text-white fs-30 mb-0">Sandbox</h3>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body pb-6">
+          <div class="widget mb-8">
+            <p>Sandbox is a multipurpose HTML5 template with various layouts which will be a great solution for your business.</p>
+          </div>
+          <!-- /.widget -->
+          <div class="widget mb-8">
+            <h4 class="widget-title text-white mb-3">Contact Info</h4>
+            <address> Moonshine St. 14/05 <br /> Light City, London </address>
+            <a href="mailto:first.last@email.com">info@email.com</a><br /> 00 (123) 456 78 90
+          </div>
+          <!-- /.widget -->
+          <div class="widget mb-8">
+            <h4 class="widget-title text-white mb-3">Learn More</h4>
+            <ul class="list-unstyled">
+              <li><a href="#">Our Story</a></li>
+              <li><a href="#">Terms of Use</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Contact Us</a></li>
+            </ul>
+          </div>
+          <!-- /.widget -->
+          <div class="widget">
+            <h4 class="widget-title text-white mb-3">Follow Us</h4>
+            <nav class="nav social social-white">
+              <a href="#"><i class="uil uil-twitter"></i></a>
+              <a href="#"><i class="uil uil-facebook-f"></i></a>
+              <a href="#"><i class="uil uil-dribbble"></i></a>
+              <a href="#"><i class="uil uil-instagram"></i></a>
+              <a href="#"><i class="uil uil-youtube"></i></a>
+            </nav>
+            <!-- /.social -->
+          </div>
+          <!-- /.widget -->
+        </div>
+        <!-- /.offcanvas-body -->
+      </div>
+      <!-- /.offcanvas -->
+      <div class="offcanvas offcanvas-top bg-light" id="offcanvas-search" data-bs-scroll="true">
+        <div class="container d-flex flex-row py-6">
+          <form class="search-form w-100">
+            <input id="search-form" type="text" class="form-control" placeholder="Type keyword and hit enter">
+          </form>
+          <!-- /.search-form -->
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <!-- /.container -->
+      </div>
+      <!-- /.offcanvas -->
+    </header>
+    <!-- /header -->
+    <section class="wrapper bg-dark">
+      <div class="swiper-container swiper-hero dots-over" data-margin="0" data-autoplay="true" data-autoplaytime="7000" data-nav="true" data-dots="true" data-items="1">
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide bg-overlay bg-overlay-400 bg-dark bg-image" data-image-src="./assets/img/bg1.png">
+              <div class="container h-100">
+                <div class="row h-100 mt-18">
+                  <div class="col-md-10 offset-md-1 col-lg-7 offset-lg-0 col-xl-6 col-xxl-5 text-center text-lg-start justify-content-center align-self-center align-items-start">
+                    <!-- <h2 class="display-1 fs-50 mb-4 text-white animate__animated animate__slideInDown animate__delay-1s">Создаем системы водоснабжения и отопления высокого класса по разумной цене</h2>
+                    <p class="lead fs-20 lh-sm mb-7 text-white animate__animated animate__slideInRight animate__delay-2s">Используем европейские материалы с лучшим соотношением цены-качества</p> -->
+                    <div class="animate__animated animate__slideInUp animate__delay-1s"><a href="#" class="btn btn-lg btn-outline-white rounded-pill">Посмотреть меню</a></div>
+                  </div>
+                  <!--/column -->
+                </div>
+                <!--/.row -->
+              </div>
+              <!--/.container -->
+            </div>
+            <!--/.swiper-slide -->
+          </div>
+          <!--/.swiper-wrapper -->
+        </div>
+        <!-- /.swiper -->
+      </div>
+      <!-- /.swiper-container -->
+    </section>
+   
+    <main id="mainContent">
+      <section id="snapping" class="section">
+        <div class="content">
+          <div class="d-flex justify-content-center">
+            <h2 class="filled-text">БУРГЕРЫ</h2>
+            <h2 class="outline-text">БУРГЕРЫ</h2>
+          </div>
+          <div class="d-flex justify-content-center mt-13">
+            <img src="./assets/img/burger003.png" alt="">
+          </div>
+          <div class="d-flex justify-content-center mt-5">
+            <button class="floating-btn btn btn-white rounded-pill fs-22">Посмотреть</button>
+          </div>
+        </div>
+      </section>
+      <section id="scrolling" class="section">
+        <div class="content">
+          <div class="d-flex justify-content-center">
+            <h2 class="filled-text">ПИЦЦЫ</h2>
+            <h2 class="outline-text">ПИЦЦЫ</h2>
+          </div>
+          <div class="d-flex justify-content-center mt-17">
+            <img src="./assets/img/pizza01.png" alt="">
+          </div>
+          <div class="d-flex justify-content-center mt-10">
+            <button class="floating-btn btn btn-white rounded-pill fs-22">Посмотреть</button>
+          </div>
+        </div>
+      </section>
+      <section id="layout" class="section">
+        <div class="content">
+          <div class="d-flex justify-content-center">
+            <h2 class="filled-text">КАЛЬЯНЫ</h2>
+            <h2 class="outline-text">КАЛЬЯНЫ</h2>
+          </div>
+          <div class="d-flex justify-content-center mt-16">
+            <img class="w-24" src="./assets/img/kalyan02.png" alt="">
+          </div>
+          <div class="d-flex justify-content-center mt-5">
+            <button class="floating-btn btn btn-white rounded-pill fs-22">Посмотреть</button>
+          </div>
+        </div>
+      </section>
+      <section id="transition" class="section">
+        <div class="content">
+          <div class="d-flex justify-content-center">
+            <h2 class="filled-text">НАПИТКИ</h2>
+            <h2 class="outline-text">НАПИТКИ</h2>
+          </div>
+          <div class="d-flex justify-content-center mt-17">
+            <img src="./assets/img/napitki01.png" alt="">
+          </div>
+          <div class="d-flex justify-content-center mt-5">
+            <button class="floating-btn btn btn-white rounded-pill fs-22">Посмотреть</button>
+          </div>
+        </div>
+      </section>
+      <section id="caveats" class="section">
+        <div class="content">
+          <div class="d-flex justify-content-center">
+            <h2 class="filled-text">ДЕСЕРТЫ</h2>
+            <h2 class="outline-text">ДЕСЕРТЫ</h2>
+          </div>
+          <div class="d-flex justify-content-center mt-13">
+            <img src="./assets/img/cheesecake.png" alt="">
+          </div>
+          <div class="d-flex justify-content-center mt-5">
+            <button class="floating-btn btn btn-white rounded-pill fs-22">Посмотреть</button>
+          </div>
+        </div>
+      </section>
+  
+    </main>
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="bg-dark text-inverse">
+    <div class="container py-13 py-md-15">
+      <div class="row gy-6 gy-lg-0">
+        <div class="col-lg-4">
+          <div class="widget">
+            <nav class="nav social social-white">
+              <a href="#"><i class="uil uil-twitter"></i></a>
+              <a href="#"><i class="uil uil-facebook-f"></i></a>
+              <a href="#"><i class="uil uil-dribbble"></i></a>
+              <a href="#"><i class="uil uil-instagram"></i></a>
+              <a href="#"><i class="uil uil-youtube"></i></a>
+            </nav>
+            <!-- /.social -->
+          </div>
+          <!-- /.widget -->
+        </div>
+        <!-- /column -->
+        <div class="col-md-4 col-lg-2 offset-lg-4">
+          <div class="widget">
+            <h4 class="widget-title mb-3 text-white">Разделы</h4>
+            <ul class="list-unstyled mb-0">
+              <li><a href="#">О компании</a></li>
+              <li><a href="#">Наши преимущества</a></li>
+              <li><a href="#">Услуги и цены</a></li>
+              <li><a href="#">Проекты</a></li>
+              <li><a href="#">Монтажники</a></li>
+            </ul>
+          </div>
+          <!-- /.widget -->
+        </div>
+        <!-- /column -->
+        <div class="col-md-4 col-lg-2">
+          <div class="widget">
+            <h4 class="widget-title mb-3 text-white">Контакты</h4>
+            <a href="mailto:first.last@email.com">info@vip-santeh.com</a><br /> 8 (495) 108 24 72
+          </div>
+          <!-- /.widget -->
+        </div>
+        <!-- /column -->
+      </div>
+      <!--/.row -->
+    </div>
+    <!-- /.container -->
+  </footer>
+  <div class="progress-wrap">
+    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+      <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+    </svg>
+  </div>
+  <script src="./assets/js/plugins.js"></script>
+  <script src="./assets/js/theme.js"></script>
+  <!-- Подключение GSAP и ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <script src="./assets/js/pages/category.js"></script>
+  <script>
+//      gsap.registerPlugin(ScrollTrigger);
+
+// // Анимация блока "Дымные кальяны"
+// gsap.to(".gsap-filled, .gsap-outline", {
+//   scrollTrigger: {
+//     trigger: ".gsap-zone",
+//     start: "top bottom",
+//     end: "bottom top",
+//     scrub: 1
+//   },
+//   x: 200 // Текст движется вправо
+// });
+
+// gsap.to(".gsap-image", {
+//   scrollTrigger: {
+//     trigger: ".gsap-zone",
+//     start: "top bottom",
+//     end: "bottom top",
+//     scrub: 1
+//   },
+//   x: -200 // Картинка движется влево
+// });
+
+// // Анимация блока "Сочные бургеры"
+// gsap.to(".burger-filled, .burger-outline", {
+//   scrollTrigger: {
+//     trigger: ".burger-zone",
+//     start: "top bottom",
+//     end: "bottom top",
+//     scrub: 1
+//   },
+//   x: -200 // Текст вправо
+// });
+
+// gsap.to(".burger-image", {
+//   scrollTrigger: {
+//     trigger: ".burger-zone",
+//     start: "top bottom",
+//     end: "bottom top",
+//     scrub: 1
+//   },
+//   x: 200 // Картинка вправо
+// });
+
+  </script>
+  
+</body>
+
+</html>
